@@ -196,6 +196,33 @@
                 mystery_badge_limit: 106,
                 character_count: 3,
                 medal_shops_count: 2,
+
+                num_flag_strings: 15,
+                num_flag_variables: 65,
+                num_flags: 700,
+                num_regional_flags: 100,
+                num_crystal_berries: 50,
+                num_enemy_encounters: 256,
+                num_library_x: 5,
+                num_library_y: 256,
+                initial_flags: [15, 30, 31, 32, 613, 681, 691],
+                // available pool => shops
+                initial_flag_variables: {
+                    [0]: 3,
+                    [1]: 1,
+                    [5]: -1,
+                    [10]: 30,
+                    [11]: 3,
+                    [28]: 9500,
+                    [29]: 4500,
+                    [37]: 8,
+                    [40]: 1,
+                    [41]: 6
+                },
+                initial_enemy_encounters: {
+                    [11]: {id: 11, seen_count: 1, unknown_1: 0},
+                },
+
                 character_names: [
                     'Vi',
                     'Kabbu',
@@ -227,10 +254,112 @@
             proto_bug_save: {
                 mystery_medals: [],
                 profile_name: "",
-                characters: [],
+                position: {x: -2, y: 0, z: 8.5},
+                available_badge_pools: [["0","1","7","12","30"],["19","6","9","43","42"]],
+                badge_shops: [],
+                modes: {
+                    ruigee: "True",
+                    hardest: "False",
+                    frameone: "False",
+                    morefarm: "False",
+                    mystery: "False",
+                    [5]: "True"
+                },
+                medals_inventory: [
+                    {
+                        id: 0,
+                        medal_id: 11,
+                        secret: false,
+                        name: "Hard Mode",
+                        description: "Boosts enemy strength, but gives you more EXP and rewards.",
+                        type: "the",
+                    },
+                ],
+                medals_party: [],
+                flag_strings: [
+                    "Hard Mode Medal",
+                    "the",
+                    "letterprompt,10,-11,-158,8"
+                ],
+                flag_variables: [],
+                flags: [],
+                regional_flags: [],
+                crystal_berries: [],
+                enemy_encounters: [],
+                library: [],
+                characters: [
+                    {
+                        id: 0,
+                        trueid: 0,
+                        exists: true,
+
+                        baseatvk: 2,
+                        atk: 2,
+
+                        def: 0,
+                        basedef: 0,
+
+                        hp: 7,
+                        basehp: 7,
+                        maxhp: 7,
+
+                        medals: [],
+                        stat_bonuses: []
+                    },
+                    {
+                        id: 1,
+                        trueid: 1,
+                        exists: true,
+
+                        baseatvk: 2,
+                        atk: 2,
+
+                        def: 0,
+                        basedef: 0,
+
+                        hp: 9,
+                        basehp: 9,
+                        maxhp: 9,
+
+                        medals: [],
+                        stat_bonuses: []
+                    },
+                    {
+                        id: 2,
+                        trueid: 2,
+                        exists: false,
+
+                        medals: [],
+                        stat_bonuses: []
+                    },
+                ],
                 party_stats: {
+                    partylevel: 1,
+                    partyexp: 0,
+                    neededexp: 100,
+                    basetp: 10,
+                    tp: 10,
                     money: 0,
-                }
+                    map_name: 16,
+                    areaid: 0,
+                    bp: 4,
+                    maxbp: 4,
+                    maxitems: 10,
+                    maxstorage: 35,
+                    clockhour: 0,
+                    clockmin: 0,
+                    clocksec: 0,
+                    save_progress_icons: 0,
+                },
+                inventory: [["0"],["27"],[""]],
+                party_stat_bonuses: [],
+                extra_followers: [""],
+                music: [
+                    {id: 0, song_id: 4, bought: false},
+                    {id: 1, song_id: 1, bought: false},
+                    {id: 2, song_id: 5, bought: false}
+                ],
+                side_quests: [["0"],["11","0"],["0"]]
             }
         },
         mounted: function(){
@@ -256,6 +385,7 @@
                             };
                         }
                     }
+                    that.fill_prototype();
                     that.reset();
                 });
             });
@@ -777,7 +907,7 @@
                 // @TODO: flag_strings[14] -- potentially a blank/redundant line?
                 lines[12] = bugSave.flag_strings.join("|SPLIT|");
 
-                // save file, line 14; flag strings
+                // save file, line 14; flag variables
                 lines[13] = bugSave.flag_variables.join(',');
 
                 // save file, line 15; regional flags
@@ -832,16 +962,66 @@
                     }
                 }
             },
+            fill_prototype () {
+                for (let i = 0; i < this.game_data.num_flag_strings; i++) {
+                    if(!this.proto_bug_save.flag_strings[i]){
+                        this.proto_bug_save.flag_strings[i] = "";
+                    }
+                }
+                for (let i = 0; i < this.game_data.num_flag_variables; i++) {
+                    if(i in this.game_data.initial_flag_variables){
+                        this.proto_bug_save.flag_variables[i] = this.game_data.initial_flag_variables[i].toString();
+                    } else {
+                        this.proto_bug_save.flag_variables[i] = "0";
+                    }
+                }
+                for (let i = 0; i < this.game_data.num_flags; i++) {
+                    this.proto_bug_save.flags[i] = this.game_data.initial_flags.includes(i);
+                }
+                for (let i = 0; i < this.game_data.num_regional_flags; i++) {
+                    this.proto_bug_save.regional_flags[i] = false;
+                }
+                for (let i = 0; i < this.game_data.num_crystal_berries; i++) {
+                    this.proto_bug_save.crystal_berries[i] = false;
+                }
+                for (let i = 0; i < this.game_data.num_crystal_berries; i++) {
+                    this.proto_bug_save.crystal_berries[i] = false;
+                }
+                for (let i = 0; i < this.game_data.num_enemy_encounters; i++) {
+                    if(i in this.game_data.initial_enemy_encounters){
+                        this.proto_bug_save.enemy_encounters[i] = this.game_data.initial_enemy_encounters[i];
+                    } else {
+                        this.proto_bug_save.enemy_encounters[i] = {
+                            id: i,
+                            seen_count: "0",
+                            unknown_1: "0"
+                        };
+                    }
+                }
+                for (let i = 0; i < this.game_data.num_library_x; i++) {
+                    this.proto_bug_save.library[i] = [];
+                    for (let j = 0; j < this.game_data.num_library_y; j++) {
+                        this.proto_bug_save.library[i][j] = false;
+                    }
+                }
+                for (let i = 0; i < this.proto_bug_save.available_badge_pools.length; i++) {
+                    this.proto_bug_save.badge_shops[i] = [];
+                    for (let j = 0; j < this.proto_bug_save.available_badge_pools[i].length; j++) {
+                        this.proto_bug_save.badge_shops[i][j] = this.medalFromId(this.proto_bug_save.available_badge_pools[i][j], j, false);
+                    }
+                }
+            },
             reset () {
                 this.bug_save = JSON.parse(JSON.stringify(this.proto_bug_save));
                 this.seed = new Date().getTime();
-                this.generate_from_seed();
                 this.bug_save.profile_name = this.seed;
+                this.bug_save.flag_strings[10] = this.seed;
+                this.generate_from_seed();
             },
             save () {
                 let bugData = this.writeBugFile(this.bug_save);
-                // bugData = this.Encrypt(bugData);
-                this.saveAndDownload(bugData, this.file_name+".out", 'application/x-binary');
+                bugData = this.Encrypt(bugData);
+                this.saveAndDownload(bugData, this.file_name, 'application/x-binary');
             },
             async dropHandler (ev) {
                 // Prevent default behavior (Prevent file from being opened)
@@ -851,9 +1031,6 @@
                     for (let i = 0; i < ev.dataTransfer.items.length; i++) {
                         // If dropped items aren't files, reject them
                         if (ev.dataTransfer.items[i].kind === 'file') {
-                            /*data[i].getAsString(function (s){
-                                ev.target.appendChild(document.getElementById(s));
-                            });*/
                             let file = ev.dataTransfer.items[i].getAsFile();
                             this.file_name = file.name;
                             console.log('loading "' + file.name + '" for use');
