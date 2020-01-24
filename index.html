@@ -12,7 +12,8 @@
     <title>Bug Fable Seeder</title>
 </head>
 <body class="bg-light">
-<div class="container" id="bug-save-app">
+<div id="bug-save-app">
+<main role="main" class="container">
     <div class="row">
         <div class="col col-3">
             <div id="drop_zone" class="text-center" v-on:drop="dropHandler" v-on:dragover="dragOverHandler">
@@ -32,28 +33,7 @@
                 <button type="button" class="btn btn-secondary" @click="reset">
                     <i class="fas fa-toilet-paper"></i> Reset
                 </button>
-                <button type="button" class="btn btn-secondary" @click="generate_from_seed()">
-                    <i class="fas fa-seedling"></i> Generate
-                </button>
             </div>
-            <br/>
-            <label for="seed">Seed:</label>
-            <input id="seed" name="seed" v-model="seed" placeholder="seed" />
-        </div>
-        <div class="col col-3">
-            <label for="generator">Medal Generator:</label>
-            <select id="generator" name="generator" v-model="badge_generator_selection" @change="generate_badge($event)">
-                <option disabled value="">Please select one</option>
-                <option v-for="badge in badge_data" v-bind:value="badge.id">
-                    {{ badge.name }}
-                </option>
-            </select>
-            <draggable @start="hideTips" class="medal-zone" v-model="badge_generator_inventory" group="medals" >
-                <bug-medal v-for="medal in badge_generator_inventory"
-                           :medal="medal"
-                           :key="medal.id">
-                </bug-medal>
-            </draggable>
         </div>
         <div class="col col-3">
             <div class="row h-100">
@@ -66,19 +46,156 @@
     <div class="row">
         <div class="card col col-12">
             <div class="card-body">
-                <h5 class="card-title">
-                    Party Info
-                </h5>
-                <h6 class="card-subtitle mb-2 text-muted">We can see you cheating berries.</h6>
                 <form class="needs-validation">
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <label for="player-name">Player Name</label>
-                            <input type="text" class="form-control" id="player-name" :value="bug_save.profile_name"/>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img src="images/ui/menu/records.png" />
                         </div>
-                        <div class="col-6 mb-3">
-                            <label for="berries-wallet">Berries (Wallet)</label>
-                            <input type="number" class="form-control" id="berries-wallet" :value="bug_save.party_stats.money"/>
+                        <div class="form-group col-md-11">
+                            <h2 class="mb-3 title-name">
+                                Save Info
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/menu/settings.png" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label>File Name</label>
+                            <input type="text" class="form-control" :value="file_name"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Player Name</label>
+                            <input type="text" class="form-control" :value="bug_save.profile_name"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Seed</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" :value="seed">
+                                <div class="input-group-append" @click="reseed()">
+                                    <span class="input-group-text"><i class="fas fa-redo"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/money.png" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Berries (Wallet)</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.money"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Berries (Bank)</label>
+                            <input type="number" class="form-control" :value="bug_save.flag_variables[26]"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/token.png" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Game Tokens</label>
+                            <input type="number" class="form-control" :value="bug_save.flag_variables[27]"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/menu/inventory.png" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Max Items</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.maxitems"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Max Storage</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.maxstorage"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/time.png" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Hours</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.clockhour"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Minutes</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.clockmin"/>
+                        </div>
+                        <div class="form-group col-3">
+                            <label>Seconds</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.clocksec"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/location.png" />
+                        </div>
+                        <div class="form-group col-2">
+                            <label>X</label>
+                            <input type="number" class="form-control" :value="bug_save.position.x"/>
+                        </div>
+                        <div class="form-group col-2">
+                            <label>Y</label>
+                            <input type="number" class="form-control" :value="bug_save.position.y"/>
+                        </div>
+                        <div class="form-group col-2">
+                            <label>Z</label>
+                            <input type="number" class="form-control" :value="bug_save.position.z"/>
+                        </div>
+                        <div class="form-group col-2">
+                            <label>Map</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.map_name"/>
+                        </div>
+                        <div class="form-group col-2">
+                            <label>Area</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.areaid"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/mystery.png" />
+                        </div>
+                        <div class="form-group col-11">
+                            <draggable @start="hideTips" class="medal-zone" v-model="bug_save.mystery_medals" group="medals" >
+                                <bug-medal v-for="medal in bug_save.mystery_medals"
+                                           :medal="medal">
+                                </bug-medal>
+                            </draggable>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-for="(shop, index) in bug_save.badge_shops">
+        <div class="card col col-12">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img :src="'images/shops/'+index+'.png'" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <h2 class="mb-3 title-name">
+                                {{ game_data.shop_names[index] }}'s Shop
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-1">
+                            <img class="icon-offset" src="images/ui/medal.png" />
+                        </div>
+                        <div class="form-group col-11">
+                            <draggable @start="hideTips" class="medal-zone" v-model="bug_save.badge_shops[index]" group="medals" >
+                                <bug-medal v-for="medal in bug_save.badge_shops[index]"
+                                           :medal="medal">
+                                </bug-medal>
+                            </draggable>
                         </div>
                     </div>
                 </form>
@@ -86,63 +203,286 @@
         </div>
     </div>
     <div class="row">
-        <div class="col col-2">
-            MYSTERY? Medals:
+        <div class="card col col-12">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img src="images/ui/party.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <h2 class="mb-3 title-name">
+                                Party
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/exp.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Level</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.partylevel">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Exp</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.partyexp">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Needed Exp</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.neededexp">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/tp.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>TP</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.tp">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Base TP</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.basetp">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/medal.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>MP</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.bp">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Max MP</label>
+                            <input type="number" class="form-control" :value="bug_save.party_stats.maxbp">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/mystery.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.medals_inventory" group="medals" >
+                                <bug-medal v-for="medal in bug_save.medals_inventory"
+                                           :medal="medal">
+                                </bug-medal>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/medal.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.medals_party" group="medals" >
+                                <bug-medal v-for="medal in bug_save.medals_party"
+                                           :medal="medal">
+                                </bug-medal>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/stats.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.party_stat_bonuses" group="statbonus" >
+                                <bug-bonus v-for="statbonus in bug_save.party_stat_bonuses"
+                                           :statbonus="statbonus">
+                                </bug-bonus>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/menu/items.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.inventory[0]" group="items" >
+                                <bug-item v-for="item in bug_save.inventory[0]"
+                                           :item="item">
+                                </bug-item>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/menu/key_items.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.inventory[1]" group="items" >
+                                <bug-item v-for="item in bug_save.inventory[1]"
+                                          :item="item">
+                                </bug-item>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/menu/bestiary.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.inventory[2]" group="items" >
+                                <bug-item v-for="item in bug_save.inventory[2]"
+                                          :item="item">
+                                </bug-item>
+                            </draggable>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <draggable @start="hideTips" class="col col-10 medal-zone" v-model="bug_save.mystery_medals" group="medals" >
-            <bug-medal v-for="medal in bug_save.mystery_medals"
-                       :medal="medal"
-                       :key="medal.id">
-            </bug-medal>
-        </draggable>
-    </div>
-    <div class="row" v-for="(shop, index) in bug_save.badge_shops">
-        <div class="col col-2">
-            {{ game_data.shop_names[index] }}'s Shop:
-        </div>
-        <draggable @start="hideTips" class="col col-10 medal-zone" v-model="bug_save.badge_shops[index]" group="medals" >
-            <bug-medal v-for="medal in bug_save.badge_shops[index]"
-                       :medal="medal"
-                       :key="medal.id">
-            </bug-medal>
-        </draggable>
-    </div>
-    <div class="row">
-        <div class="col col-2">
-            Unequipped Medals:
-        </div>
-        <draggable @start="hideTips" class="col col-10 medal-zone" v-model="bug_save.medals_inventory" group="medals" >
-            <bug-medal v-for="medal in bug_save.medals_inventory"
-                       :medal="medal"
-                       :key="medal.id">
-            </bug-medal>
-        </draggable>
-    </div>
-    <div class="row">
-        <div class="col col-2">
-            Party's Medals:
-        </div>
-        <draggable @start="hideTips" class="col col-10 medal-zone" v-model="bug_save.medals_party" group="medals" >
-            <bug-medal v-for="medal in bug_save.medals_party"
-                       :medal="medal"
-                       :key="medal.id">
-            </bug-medal>
-        </draggable>
     </div>
     <div class="row" v-for="character in bug_save.characters" v-show="character">
-        <div class="col col-2">
-            {{ game_data.character_names[character.trueid] }}'s Medals:
+        <div class="card col col-12">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img :src="'images/characters/'+character.trueid+'.png'" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <h2 class="mb-3 title-name">
+                                {{ game_data.character_names[character.trueid] }}
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/atk.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Attack</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].atk">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Base Attack</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].baseatvk">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/def.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Defense</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].def">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Base Defense</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].basedef">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/hp.png" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>HP</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].hp">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Base HP</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].basehp">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Max HP</label>
+                            <input type="number" class="form-control" :value="bug_save.characters[character.id].maxhp">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/medal.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.characters[character.id].medals" group="medals" >
+                                <bug-medal v-for="medal in bug_save.characters[character.id].medals"
+                                           :medal="medal"
+                                           :key="medal.id">
+                                </bug-medal>
+                            </draggable>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-1">
+                            <img class="icon-offset" src="images/ui/stats.png" />
+                        </div>
+                        <div class="form-group col-md-11">
+                            <draggable @start="hideTips" class="col col-12 medal-zone" v-model="bug_save.characters[character.id].stat_bonuses" group="statbonus" >
+                                <bug-bonus v-for="statbonus in bug_save.characters[character.id].stat_bonuses"
+                                           :statbonus="statbonus"
+                                           :key="statbonus.id">
+                                </bug-bonus>
+                            </draggable>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <draggable @start="hideTips" class="col col-10 medal-zone" v-model="character.medals" group="medals" >
-            <bug-medal v-for="medal in character.medals"
-                       :medal="medal"
-                       :key="medal.id">
-            </bug-medal>
-        </draggable>
     </div>
+</main>
+<footer class="footer bg-dark">
+    <div class="container">
+        <div class="card col col-12">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="col col-2">
+                            <label>Tool</label>
+                            <select class="custom-select d-block w-100" v-model="tool_type">
+                                <option value="medal">Medal Generator</option>
+                                <option value="item">Item Generator</option>
+                            </select>
+                        </div>
+                        <div class="col col-10" v-show="'medal' == tool_type">
+                            <div class="form-row">
+                                <div class="col col-3">
+                                    <label>&nbsp;</label>
+                                    <select class="custom-select d-block w-100" v-model="badge_generator_selection" @change="generate_badge($event)">
+                                        <option disabled value="">Please select one</option>
+                                        <option v-for="badge in badge_data" v-bind:value="badge.id">
+                                            {{ badge.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <draggable @start="hideTips" class="col col-9 medal-zone" v-model="badge_generator_inventory" group="medals" >
+                                    <bug-medal v-for="medal in badge_generator_inventory"
+                                               :medal="medal"
+                                               :key="medal.id">
+                                    </bug-medal>
+                                </draggable>
+                            </div>
+                        </div>
+                        <div class="col col-10" v-show="'item' == tool_type">
+                            <div class="form-row">
+                                <div class="col col-3">
+                                    <label>&nbsp;</label>
+                                    <select class="custom-select d-block w-100" v-model="item_generator_selection" @change="generate_item($event)">
+                                        <option disabled value="">Please select one</option>
+                                        <option v-for="item in item_data" v-bind:value="item.id">
+                                            {{ item.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <draggable @start="hideTips" class="col col-9 medal-zone" v-model="item_generator_inventory" group="items" >
+                                    <bug-item v-for="item in item_generator_inventory"
+                                               :item="item"
+                                               :key="item.id">
+                                    </bug-item>
+                                </draggable>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" integrity="sha256-qM7QTJSlvtPSxVRjVWNM2OfTAz/3k5ovHOKmKXuYMO4=" crossorigin="anonymous"></script>
-<script src="js/vue.min.js"></script>
+<script src="js/vue.js"></script>
 <script src="js/jquery-3.4.1.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/Sortable.min.js"></script>
@@ -151,10 +491,42 @@
 <script src="js/seededshuffle.js"></script>
 <script src="js/main.js"></script>
 <script type="application/javascript">
+    Vue.component('bug-bonus', {
+        props: ['statbonus'],
+        template: `
+        <div class="bug-bonus">
+            <a href="#">
+                <span class="notify-badge">{{ statbonus.amount }}</span>
+                <img :src='"images/ui/"+bonus_icon()+".png"' />
+            </a>
+        </div>`,
+        methods: {
+            bonus_icon() {
+                switch (this.statbonus.type) {
+                    case "0":
+                        // hp;
+                        return "hp";
+                    case "1":
+                        // attack
+                        return "atk";
+                    case "2":
+                        // defense
+                        return "def";
+                    case "3":
+                        // TP
+                        return "tp";
+                    case "4":
+                        // MP
+                        return "medal";
+                }
+            },
+        }
+    });
+
     Vue.component('bug-medal', {
         props: ['medal'],
         template: `<img
-            :src='medal.secret ? "images/mystery.png" : "images/medals/"+medal.medal_id+".png"'
+            :src='medal.secret ? "images/ui/mystery.png" : "images/medals/"+medal.medal_id+".png"'
             :alt='"#"+medal.medal_id+" ("+medal.name+")"'
             @click='onClick'
             :data-original-title='getTitle()' data-toggle="tooltip" data-html="true"
@@ -180,6 +552,24 @@
         }
     });
 
+    Vue.component('bug-item', {
+        props: ['item'],
+        template: `<img
+            :src='"images/items/"+item.item_id+".png"'
+            :data-original-title='getTitle()' data-toggle="tooltip" data-html="true"
+        />`,
+        methods: {
+            getTitle() {
+                return `
+                <h5>${this.item.name}</h5>
+                <h6>#${this.item.item_id}</h6>
+                <br/>
+                <span>${this.item.description}</span>
+                `;
+            }
+        }
+    });
+
     // noinspection JSUnusedGlobalSymbols
     var bugApp = new Vue({
         el: '#bug-save-app',
@@ -190,7 +580,12 @@
             seed: new Date().getTime(),
             tooltips: null,
             spoilers: false,
-            file_name: 'save0.dat',
+            file_name: 'save2.dat',
+            tool_type: 'medal',
+            tool_options: [
+                'medal',
+                'item'
+            ],
             game_data: {
                 encryption_key: 543,
                 mystery_badge_limit: 106,
@@ -220,7 +615,7 @@
                     [41]: 6
                 },
                 initial_enemy_encounters: {
-                    [11]: {id: 11, seen_count: 1, unknown_1: 0},
+                    [11]: {id: 11, seen_count: 1, kill_count: 0},
                 },
 
                 character_names: [
@@ -246,7 +641,12 @@
             badge_data: {},
             badge_generator_selection: null,
             badge_generator_inventory: [],
+            item_data: {},
+            item_generator_selection: null,
+            item_generator_inventory: [],
             bug_save: {
+                position: {x: 0, y: 0, z: 0},
+                flag_variables: [],
                 party_stats: {
                     money: 0,
                 },
@@ -337,21 +737,38 @@
                     partylevel: 1,
                     partyexp: 0,
                     neededexp: 100,
-                    basetp: 10,
-                    tp: 10,
+
                     money: 0,
+
+                    tp: 10,
+                    basetp: 10,
+
                     map_name: 16,
                     areaid: 0,
+
                     bp: 4,
                     maxbp: 4,
+
                     maxitems: 10,
                     maxstorage: 35,
+
                     clockhour: 0,
                     clockmin: 0,
                     clocksec: 0,
                     save_progress_icons: 0,
                 },
-                inventory: [["0"],["27"],[""]],
+                inventory: [
+                    [],
+                    [{
+                        id: 0,
+                        item_id: 27,
+                        name: "Explorer Permit",
+                        short_description: "[error: bad find/replace]",
+                        description: "Permit that shows you are a certified exploration team under the Ant Kingdom.",
+                        type: "the"
+                    }],
+                    []
+                ],
                 party_stat_bonuses: [],
                 extra_followers: [""],
                 music: [
@@ -369,24 +786,42 @@
                 // Code that will run only after the
                 // entire view has been rendered
                 this.resetTooltips();
-                $.get( "resources/BadgeName-resources.assets-2134.txt", function( data ) {
+                $.get( "resources/Items-resources.assets-2480.txt", function( data ) {
                     // console.log(data);
                 }).done(function(data){
-                    that.badge_data = {};
+                    that.item_data = {};
                     let lines = data.split("\n");
                     for(let i = 0; i < lines.length; i++){
                         if(lines[i]){
-                            let badge_info = lines[i].split("@");
-                            that.badge_data[i] = {
+                            let item_info = lines[i].split("@");
+                            that.item_data[i] = {
                                 id: i,
-                                name: badge_info[0],
-                                description: badge_info[1] ? that.replaceBulk(badge_info[1], Object.keys(that.game_data.description_find_replace), Object.values(that.game_data.description_find_replace)) : '[error: bad find/replace]',
-                                type: badge_info[2],
+                                name: item_info[0],
+                                short_description: item_info[1] ? that.replaceBulk(item_info[1], Object.keys(that.game_data.description_find_replace), Object.values(that.game_data.description_find_replace)) : '[error: bad find/replace]',
+                                description: item_info[2] ? that.replaceBulk(item_info[2], Object.keys(that.game_data.description_find_replace), Object.values(that.game_data.description_find_replace)) : '[error: bad find/replace]',
+                                type: item_info[3],
                             };
                         }
                     }
-                    that.fill_prototype();
-                    that.reset();
+                    $.get( "resources/BadgeName-resources.assets-2134.txt", function( data ) {
+                        // console.log(data);
+                    }).done(function(data){
+                        that.badge_data = {};
+                        let lines = data.split("\n");
+                        for(let i = 0; i < lines.length; i++){
+                            if(lines[i]){
+                                let badge_info = lines[i].split("@");
+                                that.badge_data[i] = {
+                                    id: i,
+                                    name: badge_info[0],
+                                    description: badge_info[1] ? that.replaceBulk(badge_info[1], Object.keys(that.game_data.description_find_replace), Object.values(that.game_data.description_find_replace)) : '[error: bad find/replace]',
+                                    type: badge_info[2],
+                                };
+                            }
+                        }
+                        that.fill_prototype();
+                        that.reset();
+                    });
                 });
             });
         },
@@ -456,6 +891,17 @@
                 } else {
                     // noinspection JSUnusedGlobalSymbols
                     this.badge_generator_inventory = [];
+                }
+                this.resetTooltips();
+            },
+            generate_item: function (ev) {
+                ev.preventDefault();
+                if(this.item_generator_selection || this.item_generator_selection == 0){
+                    // noinspection JSUnusedGlobalSymbols
+                    this.item_generator_inventory = [this.itemFromId(this.item_generator_selection, 0, false)];
+                } else {
+                    // noinspection JSUnusedGlobalSymbols
+                    this.item_generator_inventory = [];
                 }
                 this.resetTooltips();
             },
@@ -610,7 +1056,15 @@
                 chunkbuffer = lines[6].split("@");
                 bugSave.inventory = [];
                 for (let i = 0; i < chunkbuffer.length; i++) {
-                    bugSave.inventory.push(chunkbuffer[i].split(","));
+                    bugSave.inventory[i] = [];
+                    splitbuffer = chunkbuffer[i].split(",");
+                    if(splitbuffer){
+                        for (let j = 0; j < splitbuffer.length; j++) {
+                            if(splitbuffer[j]) {
+                                bugSave.inventory[i].push(this.itemFromId(splitbuffer[j], j));
+                            }
+                        }
+                    }
                 }
 
                 // save file, line 8; badges in inventory
@@ -619,7 +1073,7 @@
                 for (let i = 0; i < chunkbuffer.length; i++) {
                     splitbuffer = chunkbuffer[i].split(",");
                     if(splitbuffer[0]) {
-                        medal = this.medalFromId(splitbuffer[0], i);
+                        medal = this.medalFromId(splitbuffer[0], i, false);
                         let character_id = parseInt(splitbuffer[1], 10);
                         if (character_id >= 0) {
                             bugSave.characters[character_id].medals.push(medal);
@@ -721,7 +1175,7 @@
                     bugSave.enemy_encounters.push({
                         id: i,
                         seen_count: splitbuffer[0],
-                        unknown_1: splitbuffer[1],
+                        kill_count: splitbuffer[1],
                     });
                 }
 
@@ -823,7 +1277,7 @@
                 for (let i = 0; i < bugSave.inventory.length; i++) {
                     joinbuffer = [];
                     for (let j = 0; j < bugSave.inventory[i].length; j++) {
-                        joinbuffer.push(bugSave.inventory[i][j]);
+                        joinbuffer.push(bugSave.inventory[i][j].item_id);
                     }
                     weldbuffer.push(joinbuffer.join(','));
                 }
@@ -934,7 +1388,7 @@
                 weldbuffer = [];
                 for (let i = 0; i < bugSave.enemy_encounters.length; i++) {
                     let enemy = bugSave.enemy_encounters[i];
-                    weldbuffer.push(enemy.seen_count+","+enemy.unknown_1);
+                    weldbuffer.push(enemy.seen_count+","+enemy.kill_count);
                 }
                 lines[17] = weldbuffer.join('@');
                 return lines.join("\n");
@@ -959,6 +1413,27 @@
                         name: this.badge_data[id].name,
                         description: this.badge_data[id].description,
                         type: this.badge_data[id].type,
+                    }
+                }
+            },
+            itemFromId(id, index) {
+                if(!(id in Object.keys(this.item_data))){
+                    return {
+                        id: index,
+                        item_id: id,
+                        name: "broken medal",
+                        short_description: "desc",
+                        description: "corrupted save or an application error",
+                        type: "an",
+                    }
+                } else {
+                    return {
+                        id: index,
+                        item_id: id,
+                        name: this.item_data[id].name,
+                        short_description: "desc",
+                        description: this.item_data[id].description,
+                        type: this.item_data[id].type,
                     }
                 }
             },
@@ -994,7 +1469,7 @@
                         this.proto_bug_save.enemy_encounters[i] = {
                             id: i,
                             seen_count: "0",
-                            unknown_1: "0"
+                            kill_count: "0"
                         };
                     }
                 }
@@ -1011,7 +1486,12 @@
                     }
                 }
             },
+            reseed () {
+                this.seed = new Date().getTime();
+                this.generate_from_seed();
+            },
             reset () {
+                this.file_name = 'save2.dat';
                 this.bug_save = JSON.parse(JSON.stringify(this.proto_bug_save));
                 this.seed = new Date().getTime();
                 this.bug_save.profile_name = this.seed;
