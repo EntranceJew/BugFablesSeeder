@@ -63,16 +63,16 @@
                         </div>
                         <div class="form-group col-3">
                             <label>File Name</label>
-                            <input type="text" class="form-control" :value="file_name"/>
+                            <input type="text" class="form-control" v-model="file_name"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Player Name</label>
-                            <input type="text" class="form-control" :value="bug_save.profile_name"/>
+                            <input type="text" class="form-control" v-model="bug_save.profile_name"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Seed</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" :value="seed">
+                                <input type="text" class="form-control" v-model="seed">
                                 <div class="input-group-append" @click="reseed()">
                                     <span class="input-group-text"><i class="fas fa-redo"></i></span>
                                 </div>
@@ -85,11 +85,11 @@
                         </div>
                         <div class="form-group col-3">
                             <label>Berries (Wallet)</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.money"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.money"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Berries (Bank)</label>
-                            <input type="number" class="form-control" :value="bug_save.flag_variables[26]"/>
+                            <input type="number" class="form-control" v-model="bug_save.flag_variables[26]"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -98,7 +98,7 @@
                         </div>
                         <div class="form-group col-3">
                             <label>Game Tokens</label>
-                            <input type="number" class="form-control" :value="bug_save.flag_variables[27]"/>
+                            <input type="number" class="form-control" v-model="bug_save.flag_variables[27]"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -107,11 +107,11 @@
                         </div>
                         <div class="form-group col-3">
                             <label>Max Items</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.maxitems"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.maxitems"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Max Storage</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.maxstorage"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.maxstorage"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -120,15 +120,15 @@
                         </div>
                         <div class="form-group col-3">
                             <label>Hours</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.clockhour"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.clockhour"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Minutes</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.clockmin"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.clockmin"/>
                         </div>
                         <div class="form-group col-3">
                             <label>Seconds</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.clocksec"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.clocksec"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -137,23 +137,23 @@
                         </div>
                         <div class="form-group col-2">
                             <label>X</label>
-                            <input type="number" class="form-control" :value="bug_save.position.x"/>
+                            <input type="number" class="form-control" v-model="bug_save.position.x"/>
                         </div>
                         <div class="form-group col-2">
                             <label>Y</label>
-                            <input type="number" class="form-control" :value="bug_save.position.y"/>
+                            <input type="number" class="form-control" v-model="bug_save.position.y"/>
                         </div>
                         <div class="form-group col-2">
                             <label>Z</label>
-                            <input type="number" class="form-control" :value="bug_save.position.z"/>
+                            <input type="number" class="form-control" v-model="bug_save.position.z"/>
                         </div>
                         <div class="form-group col-2">
                             <label>Map</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.map_name"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.map_name"/>
                         </div>
                         <div class="form-group col-2">
                             <label>Area</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.areaid"/>
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.areaid"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -222,15 +222,15 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>Level</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.partylevel">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.partylevel">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Exp</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.partyexp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.partyexp">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Needed Exp</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.neededexp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.neededexp">
                         </div>
                     </div>
                     <div class="form-row">
@@ -239,11 +239,11 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>TP</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.tp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.tp">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Base TP</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.basetp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.basetp">
                         </div>
                     </div>
                     <div class="form-row">
@@ -252,11 +252,11 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>MP</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.bp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.bp">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Max MP</label>
-                            <input type="number" class="form-control" :value="bug_save.party_stats.maxbp">
+                            <input type="number" class="form-control" v-model="bug_save.party_stats.maxbp">
                         </div>
                     </div>
                     <div class="form-row">
@@ -355,11 +355,11 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>Attack</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].atk">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].atk">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Base Attack</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].baseatvk">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].baseatvk">
                         </div>
                     </div>
                     <div class="form-row">
@@ -368,11 +368,11 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>Defense</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].def">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].def">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Base Defense</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].basedef">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].basedef">
                         </div>
                     </div>
                     <div class="form-row">
@@ -381,15 +381,15 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label>HP</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].hp">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].hp">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Base HP</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].basehp">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].basehp">
                         </div>
                         <div class="form-group col-md-2">
                             <label>Max HP</label>
-                            <input type="number" class="form-control" :value="bug_save.characters[character.id].maxhp">
+                            <input type="number" class="form-control" v-model="bug_save.characters[character.id].maxhp">
                         </div>
                     </div>
                     <div class="form-row">

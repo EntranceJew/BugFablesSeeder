@@ -187,3 +187,4 @@ dist
 
 # TernJS port file
 .tern-port
+/images/gui/
